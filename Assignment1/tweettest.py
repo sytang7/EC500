@@ -9,14 +9,15 @@ from google.cloud.vision import types
 from google.cloud import bigquery
 import os
 
-
+consumer_key = 
+consumer_secret = 
+access_key = 
+access_secret = 
 
 def get_all_tweets_imageurls(screen_name = "@NintendoAmerica", Num = 100):    
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_key, access_secret)
     api = tweepy.API(auth)
-
-
 
     alltweets = []    
     new_tweets = api.user_timeline(screen_name = screen_name,count=10)
@@ -25,13 +26,16 @@ def get_all_tweets_imageurls(screen_name = "@NintendoAmerica", Num = 100):
     imageurls = []
     filenames = []
     while len(new_tweets) > 0:
+        #all subsiquent requests use the max_id param to prevent duplicates
         new_tweets = api.user_timeline(screen_name = screen_name,count=10,max_id=oldest)
         for status in new_tweets:
             if 'media' in status._json['entities']:
                 imageurls.append(status._json['entities']['media'][0]['media_url'])
                 filenames.append(status._json['id_str'])
+        #save most recent tweets
         alltweets.extend(new_tweets)
         
+        #update the id of the oldest tweet less one
         oldest = alltweets[-1].id - 1
         if(len(alltweets) > Num):
             print("Got {} images from {} so far".format(len(imageurls),screen_name))
