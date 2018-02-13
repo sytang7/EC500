@@ -19,28 +19,14 @@ def get_all_tweets_imageurls(screen_name = "@NintendoAmerica", Num = 100):
     auth.set_access_token(access_key, access_secret)
     api = tweepy.API(auth)
 
-    alltweets = []    
-    new_tweets = api.user_timeline(screen_name = screen_name,count=10)
-    alltweets.extend(new_tweets)  
-    oldest = alltweets[-1].id - 1
+    alltweets = api.user_timeline(screen_name = screen_name,count = Num)    
     imageurls = []
     filenames = []
-    while len(new_tweets) > 0:
-        #all subsiquent requests use the max_id param to prevent duplicates
-        new_tweets = api.user_timeline(screen_name = screen_name,count=10,max_id=oldest)
-        for status in new_tweets:
-            if 'media' in status._json['entities']:
-                imageurls.append(status._json['entities']['media'][0]['media_url'])
-                filenames.append(status._json['id_str'])
-        #save most recent tweets
-        alltweets.extend(new_tweets)
-        
-        #update the id of the oldest tweet less one
-        oldest = alltweets[-1].id - 1
-        if(len(alltweets) > Num):
-            print("Got {} images from {} so far".format(len(imageurls),screen_name))
-            break
-        
+    for status in alltweets:
+        if 'media' in status._json['entities']:
+            imageurls.append(status._json['entities']['media'][0]['media_url'])
+            filenames.append(status._json['id_str'])
+
     return imageurls, filenames
  
 def download_image(imageurls,filenames):
@@ -55,7 +41,8 @@ def download_image(imageurls,filenames):
     print("------------------------------------")
 
 
-def vision_analysor(imageurls,filenames):
+def vision_analysor(imageurls,filenames, credential):
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential
     client = vision.ImageAnnotatorClient()
     image = types.Image()
     file = open('results.txt', 'w')
@@ -85,6 +72,7 @@ if __name__ == '__main__':
     imageurls,filenames = get_all_tweets_imageurls("@NintendoAmerica",100)
     download_image(imageurls,filenames)
     convert_image_video(filenames,'output.mp4')
-    vision_analysor(imageurls,filenames)
+    #change this environment variable to yours
+    vision_analysor(imageurls,filenames,'ec500assignment1-e6358f3d9bbd.json')
     print("All done!")
 
