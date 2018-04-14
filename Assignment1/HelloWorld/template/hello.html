@@ -1,0 +1,25 @@
+{{hello123}}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>EC500 MINIPROJECT1</title>
+</head>
+<body style='background:pink'>
+    <h1 style=" text-align:center;color:white">Twitter Screen_Name you want to check<br>
+    EXAMPLE Enter "@LiyiCao"</h1>
+
+
+    <form style="text-align:center" action="/search" method="post">
+ 		{% csrf_token %}
+       ID Name: <input type="text" name="name" />
+      <input type="submit" value='Submit' />
+    </form>
+    <p>{{ rlt }}</p>
+
+
+
+
+
+</body>
+</html>
