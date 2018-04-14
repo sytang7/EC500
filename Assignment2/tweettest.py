@@ -9,10 +9,10 @@ from google.cloud.vision import types
 from google.cloud import bigquery
 import os
 
-consumer_key = "qUkbdUH4NhSCq0dSHGzTtF1WE"
-consumer_secret = "NfduQ8yRH7PODwVRouqa8qw0vlt7YJReuHWqQBifC6qI8XZXvC"
-access_key = "956282099606147072-j5v9VXlx4JXkxaTWc21CQha7EIzZtPu"
-access_secret = "4xoaFtRhbljNowclOc8zQhu7q6APzMVH2BccCZlYRf55k"
+consumer_key = 
+consumer_secret = 
+access_key = 
+access_secret = 
 
 def get_all_tweets_imageurls(screen_name = "@NintendoAmerica", Num = 100):    
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
